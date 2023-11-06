@@ -57,7 +57,7 @@ public class Menu extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(33, 67, 557, 239);
+		panel.setBounds(33, 54, 557, 265);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -71,7 +71,7 @@ public class Menu extends JFrame {
 		});
 		btnNewButton.setBackground(new Color(0, 128, 192));
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 20));
-		btnNewButton.setBounds(301, 37, 185, 64);
+		btnNewButton.setBounds(299, 24, 201, 53);
 		panel.add(btnNewButton);
 		
 		JButton btnNewButton_2 = new JButton("Add Product");
@@ -84,7 +84,7 @@ public class Menu extends JFrame {
 		});
 		btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnNewButton_2.setBackground(new Color(0, 128, 192));
-		btnNewButton_2.setBounds(48, 37, 185, 64);
+		btnNewButton_2.setBounds(48, 24, 201, 53);
 		panel.add(btnNewButton_2);
 		
 		JButton btnSearchdeleteProduct = new JButton("Search Product");
@@ -97,21 +97,48 @@ public class Menu extends JFrame {
 		});
 		btnSearchdeleteProduct.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnSearchdeleteProduct.setBackground(new Color(0, 128, 192));
-		btnSearchdeleteProduct.setBounds(48, 137, 185, 64);
+		btnSearchdeleteProduct.setBounds(48, 109, 201, 53);
 		panel.add(btnSearchdeleteProduct);
 		
 		JButton btnNewButton_3_1 = new JButton("All Products");
 		btnNewButton_3_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				close();
-				AllProducts s = new AllProducts();
+				AllProducts s = new AllProducts(company);
 				s.setVisible(true);
 			}
 		});
 		btnNewButton_3_1.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnNewButton_3_1.setBackground(new Color(0, 128, 192));
-		btnNewButton_3_1.setBounds(301, 137, 185, 64);
+		btnNewButton_3_1.setBounds(48, 190, 201, 53);
 		panel.add(btnNewButton_3_1);
+		
+		JButton btnUpdatedelete = new JButton("Update/Delete");
+		btnUpdatedelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				close();
+				Update_Delete s = new Update_Delete(company);
+				s.setVisible(true);
+				
+			}
+		});
+		btnUpdatedelete.setFont(new Font("Tahoma", Font.BOLD, 20));
+		btnUpdatedelete.setBackground(new Color(0, 128, 192));
+		btnUpdatedelete.setBounds(299, 109, 201, 53);
+		panel.add(btnUpdatedelete);
+		
+		JButton btnNewButton_1_1 = new JButton("Transactions");
+		btnNewButton_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				close();
+				Transactions s = new Transactions(company);
+				s.setVisible(true);
+			}
+		});
+		btnNewButton_1_1.setFont(new Font("Tahoma", Font.BOLD, 20));
+		btnNewButton_1_1.setBackground(new Color(0, 128, 192));
+		btnNewButton_1_1.setBounds(299, 190, 201, 53);
+		panel.add(btnNewButton_1_1);
 		
 		JButton btnBack = new JButton("Back To Login");
 		btnBack.addActionListener(new ActionListener() {

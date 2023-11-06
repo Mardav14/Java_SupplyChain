@@ -20,13 +20,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import javax.swing.border.EtchedBorder;
 
 public class Product extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtProductName;
-	private JTextField txtOwner;
 	private JTextField txtQty;
 	private JTextField txtPrice;
 	String company;
@@ -63,57 +63,47 @@ public class Product extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("Add Product");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 28));
-		lblNewLabel.setBounds(225, 10, 159, 46);
+		lblNewLabel.setBounds(225, 26, 159, 46);
 		contentPane.add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "Product", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(55, 56, 515, 263);
+		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Add Product", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel.setBounds(55, 92, 515, 227);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel_1 = new JLabel("Product Name:");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblNewLabel_1.setBounds(72, 27, 128, 32);
+		lblNewLabel_1.setBounds(71, 29, 128, 32);
 		panel.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_1_1 = new JLabel("Owner");
-		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblNewLabel_1_1.setBounds(72, 69, 128, 32);
-		panel.add(lblNewLabel_1_1);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Price");
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblNewLabel_1_1_1.setBounds(72, 153, 128, 32);
+		lblNewLabel_1_1_1.setBounds(71, 113, 128, 32);
 		panel.add(lblNewLabel_1_1_1);
 		
 		JLabel lblNewLabel_1_1_2 = new JLabel("Qty");
 		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblNewLabel_1_1_2.setBounds(72, 111, 128, 32);
+		lblNewLabel_1_1_2.setBounds(71, 71, 128, 32);
 		panel.add(lblNewLabel_1_1_2);
 		
 		txtProductName = new JTextField();
-		txtProductName.setBounds(230, 33, 177, 25);
+		txtProductName.setBounds(229, 35, 177, 25);
 		panel.add(txtProductName);
 		txtProductName.setColumns(10);
 		
-		txtOwner = new JTextField();
-		txtOwner.setColumns(10);
-		txtOwner.setBounds(230, 75, 177, 25);
-		panel.add(txtOwner);
-		
 		txtQty = new JTextField();
 		txtQty.setColumns(10);
-		txtQty.setBounds(230, 117, 177, 25);
+		txtQty.setBounds(229, 77, 177, 25);
 		panel.add(txtQty);
 		
 		txtPrice = new JTextField();
 		txtPrice.setColumns(10);
-		txtPrice.setBounds(230, 159, 177, 25);
+		txtPrice.setBounds(229, 119, 177, 25);
 		panel.add(txtPrice);
 		
 		JButton btnNewButton = new JButton("Save");
-		btnNewButton.setBounds(181, 196, 104, 46);
+		btnNewButton.setBounds(180, 156, 104, 46);
 		panel.add(btnNewButton);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
@@ -122,7 +112,7 @@ public class Product extends JFrame {
 				
 				String pName, owner, qty, price;
 				pName = txtProductName.getText();
-				owner = txtOwner.getText();
+				
 				qty = txtQty.getText();
 				price = txtPrice.getText();
 				
@@ -133,7 +123,7 @@ public class Product extends JFrame {
 					
 			        pst = connection.prepareStatement("insert into product (product_name,owner,qty,price)values(?,?,?,?)");
 			        pst.setString(1, pName);
-			        pst.setString(2, owner);
+			        pst.setString(2, company);
 			        pst.setString(3, qty);
 			        pst.setString(4, price);
 			        pst.executeUpdate();
@@ -141,7 +131,7 @@ public class Product extends JFrame {
 //			        table_load();
 			                       
 			        txtProductName.setText("");
-			        txtOwner.setText("");
+			        
 			        txtQty.setText("");
 			        txtPrice.setText("");
 			        txtProductName.requestFocus();

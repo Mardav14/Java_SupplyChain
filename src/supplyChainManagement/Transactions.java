@@ -24,7 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
-public class AllProducts extends JFrame {
+public class Transactions extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -38,7 +38,7 @@ public class AllProducts extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AllProducts frame = new AllProducts("company");
+					Transactions frame = new Transactions("company");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,7 +50,7 @@ public class AllProducts extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AllProducts(String company) {
+	public Transactions(String company) {
 		this.company=company;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 641, 422);
@@ -60,9 +60,9 @@ public class AllProducts extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Products List");
+		JLabel lblNewLabel = new JLabel("Transaction Details");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 28));
-		lblNewLabel.setBounds(232, 10, 165, 34);
+		lblNewLabel.setBounds(179, 10, 236, 34);
 		contentPane.add(lblNewLabel);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -93,7 +93,9 @@ public class AllProducts extends JFrame {
 	    try 
 	    {
 	    connection = DatabaseConnection.getConnection();
-	    pst = connection.prepareStatement("select owner, product_name, qty, price, id from product order by owner");
+	    pst = connection.prepareStatement("select * from transactions where buyer_company = ? or seller_company = ?");
+	    pst.setString(1, company);
+	    pst.setString(2, company);
 	    ResultSet rs = pst.executeQuery();
 	    table.setModel(DbUtils.resultSetToTableModel(rs));
 	    pst.close();

@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -40,7 +42,7 @@ public class BuyProduct extends JFrame {
 	private JTextField txtPrice;
 	private JTextField txtQtyBill;
 	private JTextField txtCompany;
-	String company;
+	String company, oldQty;
 
 	/**
 	 * Launch the application.
@@ -90,6 +92,7 @@ public class BuyProduct extends JFrame {
 		panel.add(lblNewLabel_2);
 		
 		txtProdName = new JTextField();
+		txtProdName.setEditable(false);
 		txtProdName.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtProdName.setHorizontalAlignment(SwingConstants.CENTER);
 		txtProdName.setBounds(10, 89, 135, 37);
@@ -111,6 +114,7 @@ public class BuyProduct extends JFrame {
 		panel.add(lblNewLabel_1_2_1);
 		
 		txtOwner = new JTextField();
+		txtOwner.setEditable(false);
 		txtOwner.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtOwner.setHorizontalAlignment(SwingConstants.CENTER);
 		txtOwner.setColumns(10);
@@ -125,6 +129,7 @@ public class BuyProduct extends JFrame {
 		panel.add(lblNewLabel_1_2_1_1);
 		
 		txtTotal = new JTextField();
+		txtTotal.setEditable(false);
 		txtTotal.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtTotal.setHorizontalAlignment(SwingConstants.CENTER);
 		txtTotal.setColumns(10);
@@ -139,6 +144,7 @@ public class BuyProduct extends JFrame {
 		panel.add(lblNewLabel_1_2_1_1_1);
 		
 		txtPrice = new JTextField();
+		txtPrice.setEditable(false);
 		txtPrice.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtPrice.setHorizontalAlignment(SwingConstants.CENTER);
 		txtPrice.setColumns(10);
@@ -153,6 +159,7 @@ public class BuyProduct extends JFrame {
 		panel.add(lblNewLabel_1_2_1_1_2);
 		
 		txtQtyBill = new JTextField();
+		txtQtyBill.setEditable(false);
 		txtQtyBill.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtQtyBill.setHorizontalAlignment(SwingConstants.CENTER);
 		txtQtyBill.setColumns(10);
@@ -165,6 +172,7 @@ public class BuyProduct extends JFrame {
 		panel.add(lblNewLabel_1_1_2);
 		
 		txtCompany = new JTextField();
+		txtCompany.setEditable(false);
 		txtCompany.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtCompany.setColumns(10);
 		txtCompany.setBounds(432, 16, 168, 30);
@@ -206,6 +214,72 @@ public class BuyProduct extends JFrame {
 		txtQty.setColumns(10);
 		
 		JButton btnNewButton = new JButton("Place Order");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String id, pName, owner, qty, price, total;
+				id = txtid.getText();
+				pName = txtProdName.getText();
+				owner = txtOwner.getText();
+				qty = txtQtyBill.getText();
+				price = txtPrice.getText();
+				total = txtTotal.getText();
+				
+					Connection connection;
+					PreparedStatement pst, pst1, pst2;
+					try {
+						connection = DatabaseConnection.getConnection();
+						
+				        pst = connection.prepareStatement("insert into transactions (seller_company, buyer_company,product_name,qty,price,total)values(?,?,?,?,?,?)");
+				        pst.setString(1, owner);
+				        pst.setString(2, company);
+				        pst.setString(3, pName);
+				        pst.setString(4, qty);
+				        pst.setString(5, price);
+				        pst.setString(6, total);
+				        
+				        pst1 = connection.prepareStatement("update product set qty = ? where id = ?");
+				        pst1.setString(1, Integer.toString(Integer.parseInt(oldQty) - Integer.parseInt(qty)));
+				        pst1.setString(2, id);
+				        
+				        pst2 = connection.prepareStatement("insert into product (product_name,owner,qty,price)values(?,?,?,?)");
+				        pst2.setString(1, pName);
+				        pst2.setString(2, company);
+				        pst2.setString(3, qty);
+				        pst2.setString(4, price);
+				      
+				        pst.executeUpdate();
+				        pst1.executeUpdate();
+				        pst2.executeUpdate();
+				        
+				        
+				        
+				        JOptionPane.showMessageDialog(null, "Order Placed");
+//				        table_load();
+				                       
+				        
+				        pst.close();	
+//						connection.close();
+				       }
+				    catch (SQLException e1) 
+				        {            
+				       e1.printStackTrace();
+				        
+				    } catch (Exception e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+				
+				
+				txtProdName.setText("");
+		        
+		        txtQtyBill.setText("");
+		        txtPrice.setText("");
+		        txtOwner.setText("");
+		        txtTotal.setText("");
+		        txtProdName.requestFocus();
+				
+			}
+		});
 		btnNewButton.setBounds(211, 325, 160, 46);
 		contentPane.add(btnNewButton);
 		btnNewButton.setBackground(new Color(0, 128, 192));
@@ -220,6 +294,11 @@ public class BuyProduct extends JFrame {
                 	connection = DatabaseConnection.getConnection();
                        String id = txtid.getText();
                        String qty = txtQty.getText();
+                       String name= "";
+                       String owner = "";
+                       String price = "";
+                       String total_str = "";
+                       int price_int =0, qty_int= 0, total= 0;
                        
                            pst = connection.prepareStatement("select product_name,owner,qty,price from product where id = ?");
                            pst.setString(1, id);
@@ -228,30 +307,37 @@ public class BuyProduct extends JFrame {
                        if(rs.next()==true)
                        {
                          
-                           String name = rs.getString(1);
-                           String owner = rs.getString(2);
-                           String oldQty = rs.getString(3);
-                           String price = rs.getString(4);
-                           int price_int = Integer.parseInt(price);
-                           int qty_int = Integer.parseInt(qty);
-                           int total = price_int * qty_int;
-                           String total_str = Integer.toString(total);
+                           name = rs.getString(1);
+                           owner = rs.getString(2);
+                           oldQty = rs.getString(3);
+                           price = rs.getString(4);
+                           price_int = Integer.parseInt(price);
+                           qty_int = Integer.parseInt(qty);
+                           total = price_int * qty_int;
+                           total_str = Integer.toString(total);
                            
-                           txtProdName.setText(name);
+                           
+                       }
+                       if(qty_int<= Integer.parseInt(oldQty)) {
+                    	   
+                    	   txtProdName.setText(name);
                            txtCompany.setText(company);
                            txtOwner.setText(owner);
                            txtQtyBill.setText(qty);
                            txtPrice.setText(price);
                            txtTotal.setText(total_str);
-                       }   
-                       else
-                       {
-                           txtProdName.setText("");
-                           txtOwner.setText("");
-                           txtQty.setText("");
-                           txtPrice.setText("");
-                            
                        }
+                       else {
+       					JOptionPane.showMessageDialog(null, "Only " + oldQty + " pieces are in stock");
+       					txtProdName.setText("");
+           		        
+           		        txtQtyBill.setText("");
+           		        txtPrice.setText("");
+           		        txtOwner.setText("");
+           		        txtTotal.setText("");
+           		        txtid.requestFocus();
+       				}
+       				
                        pst.close();	
 //   					connection.close();
                    } 
